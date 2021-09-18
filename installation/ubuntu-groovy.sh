@@ -1,7 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
 directory="ubuntu-groovy"
-bin="start-ubuntu-groovy"
-tarball="rootfs.tar.gz"
 if [ -d "$PREFIX/share/$directory" ]; then
 printf "\n\e[31mError: distribution Ubuntu Groovy is already installed.\n\n\e[0m"
 exit 1
@@ -17,6 +15,7 @@ exit 1 ;;
 esac
 apt update > /dev/null 2>&1
 apt install proot -y > /dev/null 2>&1
+tarball="rootfs.tar.gz"
 printf "\e[34m[\e[32m*\e[34m]\e[36m Downloading Ubuntu Groovy, please wait...\n\n\e[34m"
 curl --fail --retry 5 --location --output "$tarball" \
 "https://partner-images.canonical.com/core/groovy/current/ubuntu-groovy-core-cloudimg-$arch-root.tar.gz"
@@ -211,6 +210,7 @@ balloon_migrate 0
 swap_ra 9661
 swap_ra_hit 7872
 EOF
+bin="start-ubuntu-groovy"
 printf "\e[34m[\e[32m*\e[34m]\e[36m Writing $bin file...\n\e[0m"
 cat <<- EOF > "$PREFIX/bin/$bin"
 #!/data/data/com.termux/files/usr/bin/bash
