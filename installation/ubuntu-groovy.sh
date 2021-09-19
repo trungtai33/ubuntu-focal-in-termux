@@ -47,12 +47,6 @@ done < <(paste <(id -G | tr ' ' '\n'))
 cat <<- EOF > "$PREFIX/share/$directory/proc/.model"
 $(getprop ro.product.brand) $(getprop ro.product.model)
 EOF
-cat <<- EOF > "$PREFIX/share/$directory/proc/.version"
-Linux version 5.8.0 (build@ubuntu) (gcc version 4.9 (GCC)) #1 SMP Thursday August 14 12:00:00 UTC 2020
-EOF
-cat <<- EOF > "$PREFIX/share/$directory/proc/.osrelease"
-5.8.0
-EOF
 cat <<- EOF > "$PREFIX/share/$directory/proc/.loadavg"
 0.35 0.22 0.05 1/573 7767
 EOF
@@ -210,6 +204,9 @@ balloon_migrate 0
 swap_ra 9661
 swap_ra_hit 7872
 EOF
+cat <<- EOF > "$PREFIX/share/$directory/proc/.version"
+Linux version 5.8.0 (build@ubuntu) (gcc version 4.9 (GCC)) #1 SMP Thursday August 14 12:00:00 UTC 2020
+EOF
 bin="start-ubuntu-groovy"
 printf "\e[34m[\e[32m*\e[34m]\e[36m Writing $bin file...\n\e[0m"
 cat <<- EOF > "$PREFIX/bin/$bin"
@@ -221,6 +218,7 @@ command+=" --link2symlink"
 command+=" --kill-on-exit"
 command+=" --root-id"
 command+=" --rootfs=$PREFIX/share/$directory"
+command+=" --cwd=/root"
 command+=" --bind=/dev"
 command+=" --bind=/dev/urandom:/dev/random"
 command+=" --bind=/proc"
@@ -230,16 +228,9 @@ command+=" --bind=/proc/self/fd/1:/dev/stdout"
 commamd+=" --bind=/proc/self/fd/2:/dev/stderr"
 command+=" --bind=/sys"
 command+=" --bind=/data/data/com.termux"
+command+=" --bind=/sdcard"
 command+=" --bind=$PREFIX/share/$directory/root:/dev/shm"
-if ! cat /proc/device-tree/model > /dev/null 2>&1; then
 command+=" --bind=$PREFIX/share/$directory/proc/.model:/proc/device-tree/model"
-fi
-if ! cat /proc/version > /dev/null 2>&1; then
-command+=" --bind=$PREFIX/share/$directory/proc/.version:/proc/version"
-fi
-if ! cat /proc/sys/kernel/osrelease > /dev/null 2>&1; then
-command+=" --bind=$PREFIX/share/$directory/proc/.osrelease:/proc/sys/kernel/osrelease"
-fi
 if ! cat /proc/loadavg > /dev/null 2>&1; then
 command+=" --bind=$PREFIX/share/$directory/proc/.loadavg:/proc/loadavg"
 fi
@@ -252,8 +243,7 @@ fi
 if ! cat /proc/vmstat > /dev/null 2>&1; then
 command+=" --bind=$PREFIX/share/$directory/proc/.vmstat:/proc/vmstat"
 fi
-command+=" --bind=/sdcard"
-command+=" --cwd=/root"
+command+=" --bind=$PREFIX/share/$directory/proc/.version:/proc/version"
 command+=" /usr/bin/env -i"
 command+=" HOME=/root"
 command+=" PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
