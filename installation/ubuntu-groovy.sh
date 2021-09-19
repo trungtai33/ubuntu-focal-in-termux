@@ -2,7 +2,7 @@
 directory="ubuntu-groovy"
 if [ -d "$PREFIX/share/$directory" ]; then
 printf "\n\e[31mError: distribution Ubuntu Groovy is already installed.\n\n\e[0m"
-exit 1
+exit
 fi
 printf "\n\e[34m[\e[32m*\e[34m]\e[36m Checking device architecture...\n\e[0m"
 case $(uname -m) in
@@ -11,7 +11,7 @@ armv7l|armv8l) arch="armhf" ;;
 x86_64) arch="amd64" ;;
 *)
 printf "\e[34m[\e[32m*\e[34m]\e[31m Unsupported architecture.\n\n\e[0m"
-exit 1 ;;
+exit ;;
 esac
 apt update > /dev/null 2>&1
 apt install proot -y > /dev/null 2>&1
