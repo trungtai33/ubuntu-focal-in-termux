@@ -43,6 +43,9 @@ while read group_name group_id; do
 cat <<- EOF >> "${PREFIX}/share/${directory}/etc/group"
 ${group_name}:x:${group_id}:
 EOF
+cat <<- EOF >> "${PREFIX}/share/${directory}/etc/gshadow"
+${group_name}:*::
+EOF
 done < <(paste <(id -Gn | tr ' ' '\n') <(id -G | tr ' ' '\n'))
 cat <<- EOF > "${PREFIX}/share/${directory}/proc/.loadavg"
 0.35 0.22 0.15 1/573 7767
