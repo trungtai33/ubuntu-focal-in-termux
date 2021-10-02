@@ -16,24 +16,23 @@ esac
 apt update > /dev/null 2>&1
 apt install -y proot > /dev/null 2>&1
 tarball="rootfs.tar.gz"
-printf "\e[34m[\e[32m*\e[34m]\e[36m Downloading Ubuntu Groovy, please wait...\n\n\e[34m"
+distro="Ubuntu Groovy"
+printf "\e[34m[\e[32m*\e[34m]\e[36m Downloading ${distro}, please wait...\n\n\e[34m"
 curl --fail --retry 5 --location --output "${tarball}" \
 "https://partner-images.canonical.com/core/groovy/current/ubuntu-groovy-core-cloudimg-${arch}-root.tar.gz"
 mkdir -p "${PREFIX}/share/${directory}"
-printf "\n\e[34m[\e[32m*\e[34m]\e[36m Installing Ubuntu Groovy, please wait...\n\e[31m"
+printf "\n\e[34m[\e[32m*\e[34m]\e[36m Installing ${distro}, please wait...\n\e[31m"
 proot --link2symlink tar -xf "${tarball}" --directory="${PREFIX}/share/${directory}" --exclude='dev'||:
+printf "\e[34m[\e[32m*\e[34m]\e[36m Setting up ${distro}, please wait...\n\e[31m"
 rm -f "${tarball}"
-printf "\e[34m[\e[32m*\e[34m]\e[36m Writing profile file...\n\e[31m"
 cat <<- EOF >> "${PREFIX}/share/${directory}/etc/profile"
 export PULSE_SERVER="127.0.0.1"
 export MOZ_FAKE_NO_SANDBOX="1"
 EOF
-printf "\e[34m[\e[32m*\e[34m]\e[36m Writing resolv.conf file (DNS 8.8.8.8/8.8.4.4)...\n\e[31m"
 cat <<- EOF > "${PREFIX}/share/${directory}/etc/resolv.conf"
 nameserver 8.8.8.8
 nameserver 8.8.4.4
 EOF
-printf "\e[34m[\e[32m*\e[34m]\e[36m Writing hosts file...\n\e[31m"
 cat <<- EOF > "${PREFIX}/share/${directory}/etc/hosts"
 127.0.0.1 localhost
 ::1       ip6-localhost ip6-loopback
@@ -160,7 +159,6 @@ cat <<- EOF > "${PREFIX}/share/${directory}/proc/.version"
 Linux version 5.8.0 (termux@ubuntu) (gcc version 4.9 (GCC)) $(uname -v)
 EOF
 bin="start-ubuntu-groovy"
-printf "\e[34m[\e[32m*\e[34m]\e[36m Writing ${bin} file...\n\e[0m"
 cat <<- EOF > "${PREFIX}/bin/${bin}"
 #!/data/data/com.termux/files/usr/bin/bash
 unset LD_PRELOAD
