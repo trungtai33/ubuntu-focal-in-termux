@@ -1,6 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
-directory="ubuntu-groovy"
-distro_name="Ubuntu Groovy"
+directory="ubuntu-focal"
+distro_name="Ubuntu Focal"
 if [ -d "${PREFIX}/share/${directory}" ]; then
 printf "\n\e[34m[\e[32m*\e[34m]\e[36m Uninstalling ${distro_name}, please wait...\n\e[31m"
 rm -rf "${PREFIX}/share/${directory}"
