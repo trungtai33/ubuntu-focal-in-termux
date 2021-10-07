@@ -1,5 +1,5 @@
 ## Ubuntu 20.04 (Focal Fossa) in Termux
-![image](neofetch.png)
+![image](neofetch1.png)
 ## Installation
 ```
 curl --silent --location --remote-name https://github.com/trungtai33/ubuntu-focal-in-termux/raw/master/install.sh && bash install.sh && rm install.sh
