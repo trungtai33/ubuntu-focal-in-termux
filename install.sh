@@ -1,6 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
-directory="ubuntu-groovy"
-distro_name="Ubuntu Groovy"
+directory="ubuntu-focal"
+distro_name="Ubuntu Focal"
 if [ -d "${PREFIX}/share/${directory}" ]; then
 printf "\n\e[31mError: distribution ${distro_name} is already installed.\n\n\e[0m"
 exit
@@ -19,12 +19,19 @@ apt install -y proot > /dev/null 2>&1
 tarball="rootfs.tar.gz"
 printf "\e[34m[\e[32m*\e[34m]\e[36m Downloading ${distro_name}, please wait...\n\n\e[34m"
 curl --fail --retry 5 --location --output "${tarball}" \
-"https://partner-images.canonical.com/core/groovy/current/ubuntu-groovy-core-cloudimg-${arch}-root.tar.gz"
+"https://partner-images.canonical.com/core/focal/current/ubuntu-focal-core-cloudimg-${arch}-root.tar.gz"
 mkdir -p "${PREFIX}/share/${directory}"
 printf "\n\e[34m[\e[32m*\e[34m]\e[36m Installing ${distro_name}, please wait...\n\e[31m"
 proot --link2symlink tar -xf "${tarball}" --directory="${PREFIX}/share/${directory}" --exclude='dev'||:
 printf "\e[34m[\e[32m*\e[34m]\e[36m Setting up ${distro_name}, please wait...\n\e[31m"
 rm -f "${tarball}"
+libgcc_s_path="/$(cd ${PREFIX}/share/${directory}; find usr/lib -name libgcc_s.so.1)"
+if [ "${libgcc_s_path}" != "/" ]; then
+cat <<- EOF > "${PREFIX}/share/${directory}/etc/ld.so.preload"
+${libgcc_s_path}
+EOF
+chmod 644 "${PREFIX}/share/${directory}/etc/ld.so.preload"
+fi
 cat <<- EOF >> "${PREFIX}/share/${directory}/etc/profile"
 export PULSE_SERVER="127.0.0.1"
 export MOZ_FAKE_NO_SANDBOX="1"
