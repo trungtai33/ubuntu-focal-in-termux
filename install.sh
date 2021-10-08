@@ -23,8 +23,8 @@ tarball="rootfs.tar.gz"
 printf "\e[34m[\e[32m*\e[34m]\e[36m Downloading ${distro_name}, please wait...\n\n\e[34m"
 if ! curl --fail --retry 5 --location --output "${tarball}" \
 "https://partner-images.canonical.com/core/focal/current/ubuntu-focal-core-cloudimg-${arch}-root.tar.gz"; then
-printf "\n\e[34m[\e[32m*\e[34m]\e[36m Download failure, please check your network connection.\n\n\e[0m"
 rm -f "${tarball}"
+printf "\n\e[34m[\e[32m*\e[34m]\e[36m Download failure, please check your network connection.\n\n\e[0m"
 exit
 fi
 printf "\n\e[34m[\e[32m*\e[34m]\e[36m Installing ${distro_name}, please wait...\n\e[0m"
