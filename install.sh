@@ -7,18 +7,11 @@ exit
 fi
 printf "\n\e[34m[\e[32m*\e[34m]\e[36m Checking device architecture...\n\e[0m"
 case $(uname -m) in
-aarch64)
-arch="arm64"
-multiarch="aarch64-linux-gnu" ;;
-armv7l|armv8l)
-arch="armhf"
-multiarch="arm-linux-gnueabihf" ;;
-x86_64)
-arch="amd64"
-multiarch="x86_64-linux-gnu" ;;
+aarch64) arch="arm64"; multiarch="aarch64-linux-gnu" ;;
+armv7l|armv8l) arch="armhf"; multiarch="arm-linux-gnueabihf" ;;
+x86_64) arch="amd64"; multiarch="x86_64-linux-gnu" ;;
 *)
-printf "\e[34m[\e[32m*\e[34m]\e[31m Unsupported architecture.\n\n\e[0m"
-exit ;;
+printf "\e[34m[\e[32m*\e[34m]\e[31m Unsupported architecture.\n\n\e[0m"; exit ;;
 esac
 apt update > /dev/null 2>&1
 apt install -y proot > /dev/null 2>&1
@@ -213,7 +206,7 @@ command+=" TERM=\$TERM"
 command+=" TMPDIR=/tmp"
 command+=" LANG=C.UTF-8"
 command+=" /bin/bash --login"
-com="\$@" && [ -z "\$1" ] && exec \$command || \$command -c "\$com"
+com="\$@"; [ -z "\$1" ] && exec \$command || \$command -c "\$com"
 EOF
 termux-fix-shebang "${PREFIX}/bin/start-${directory}"
 chmod 700 "${PREFIX}/bin/start-${directory}"
