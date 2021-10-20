@@ -17,7 +17,7 @@ apt update > /dev/null 2>&1
 apt install -y proot > /dev/null 2>&1
 tarball="rootfs.tar.gz"
 printf "\e[34m[\e[32m*\e[34m]\e[36m Downloading ${distribution}, please wait...\n\n\e[34m"
-if ! curl --fail --retry 5 --location --output "${tarball}" \
+if ! curl --location --output "${tarball}" \
 "https://partner-images.canonical.com/core/focal/current/ubuntu-focal-core-cloudimg-${arch}-root.tar.gz"; then
 printf "\n\e[34m[\e[32m*\e[34m]\e[31m Download failed, please check your network connection.\n\n\e[0m"
 rm -f "${tarball}"
