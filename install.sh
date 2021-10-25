@@ -34,6 +34,7 @@ EOF
 cat <<- EOF >> "${PREFIX}/share/${directory}/etc/profile"
 export PULSE_SERVER="127.0.0.1"
 export MOZ_FAKE_NO_SANDBOX="1"
+export TMPDIR=/tmp
 export LANG="C.UTF-8"
 EOF
 cat <<- EOF > "${PREFIX}/share/${directory}/etc/resolv.conf"
