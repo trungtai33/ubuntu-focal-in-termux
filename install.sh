@@ -46,7 +46,7 @@ cat <<- EOF > "${PREFIX}/share/${directory}/etc/hosts"
 EOF
 while read group_name group_id; do
 cat <<- EOF >> "${PREFIX}/share/${directory}/etc/group"
-${group_name}:x:${group_id}::
+${group_name}:x:${group_id}:
 EOF
 cat <<- EOF >> "${PREFIX}/share/${directory}/etc/gshadow"
 ${group_name}:!::
