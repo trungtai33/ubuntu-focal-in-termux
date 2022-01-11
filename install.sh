@@ -15,8 +15,8 @@ printf "\e[34m[\e[32m*\e[34m]\e[31m Unsupported architecture.\e[0m\n\n"; exit ;;
 esac
 apt update > /dev/null 2>&1
 apt install proot -y > /dev/null 2>&1
-tarball="rootfs.tar.gz"
 printf "\e[34m[\e[32m*\e[34m]\e[36m Downloading ${distribution}, please wait...\e[34m\n\n"
+tarball="${directory}.tar.gz"
 if ! curl --location --output "${tarball}" \
 "https://partner-images.canonical.com/core/focal/current/ubuntu-focal-core-cloudimg-${arch}-root.tar.gz"; then
 printf "\e[0m\n\e[34m[\e[32m*\e[34m]\e[31m Download failed, please check your network connection.\e[0m\n\n"
@@ -40,8 +40,8 @@ nameserver 8.8.8.8
 nameserver 8.8.4.4
 EOF
 cat <<- EOF > "${PREFIX}/share/${directory}/etc/hosts"
-127.0.0.1 localhost
-::1       ip6-localhost ip6-loopback
+127.0.0.1  localhost
+::1        ip6-localhost ip6-loopback
 EOF
 while read group_name group_id; do
 cat <<- EOF >> "${PREFIX}/share/${directory}/etc/group"
