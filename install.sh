@@ -11,14 +11,14 @@ aarch64) arch="arm64" multiarch="aarch64-linux-gnu" ;;
 armv7l|armv8l) arch="armhf" multiarch="arm-linux-gnueabihf" ;;
 x86_64) arch="amd64" multiarch="x86_64-linux-gnu" ;;
 *)
-printf "\e[34m[\e[32m*\e[34m]\e[31m Unsupported architecture.\e[0m\n\n"; exit ;;
+printf "\e[34m[\e[31m!\e[34m]\e[31m Unsupported architecture.\e[0m\n\n"; exit ;;
 esac
 pkg install proot -y > /dev/null 2>&1
 printf "\e[34m[\e[32m*\e[34m]\e[36m Downloading ${distribution}, please wait...\e[34m\n\n"
 tarball="${directory}.tar.gz"
 if ! curl --location --output "${tarball}" \
 "https://partner-images.canonical.com/core/focal/current/ubuntu-focal-core-cloudimg-${arch}-root.tar.gz"; then
-printf "\e[0m\n\e[34m[\e[32m*\e[34m]\e[31m Download failed, please check your network connection.\e[0m\n\n"
+printf "\e[0m\n\e[34m[\e[31m!\e[34m]\e[31m Download failed, please check your network connection.\e[0m\n\n"
 rm -f "${tarball}"
 exit
 fi
@@ -157,14 +157,17 @@ unevictable_pgs_munlocked 0
 unevictable_pgs_cleared 0
 unevictable_pgs_stranded 0
 EOF
+cat <<- EOF > "${PREFIX}/share/${directory}/proc/.model"
+$(getprop ro.product.brand) $(getprop ro.product.model)
+EOF
 cat <<- EOF > "${PREFIX}/share/${directory}/proc/.version"
-Linux version 5.8.0 (termux@android) (gcc version 4.9 (GCC)) $(uname -v)
+Linux version 5.10.0 (termux@android) (gcc version 4.9 (GCC)) $(uname -v)
 EOF
 cat <<- EOF > "${PREFIX}/bin/start-${directory}"
 #!/data/data/com.termux/files/usr/bin/bash
 unset LD_PRELOAD
 command="proot"
-command+=" --kernel-release=5.8.0"
+command+=" --kernel-release=5.10.0"
 command+=" --link2symlink"
 command+=" --kill-on-exit"
 command+=" --rootfs=\${PREFIX}/share/${directory}"
@@ -192,6 +195,7 @@ fi
 if ! cat /proc/vmstat > /dev/null 2>&1; then
 command+=" --bind=\${PREFIX}/share/${directory}/proc/.vmstat:/proc/vmstat"
 fi
+command+=" --bind=\${PREFIX}/share/${directory}/proc/.model:/sys/firmware/devicetree/base/model"
 command+=" --bind=\${PREFIX}/share/${directory}/proc/.version:/proc/version"
 command+=" /usr/bin/env --ignore-environment"
 command+=" TERM=\${TERM-xterm-256color}"
